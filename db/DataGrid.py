@@ -7,7 +7,7 @@ from PyQt5.QtSql import *
 
 class DateGrid(QWidget):
     def createTableAndInit(self):
-        self.db = QSqlDatabase('QSQLITE')
+        self.db = QSqlDatabase.addDatabase('QSQLITE')
         self.db.setDatabaseName('./db/database.db')
 
         if not self.db.open():
@@ -15,7 +15,7 @@ class DateGrid(QWidget):
 
         query = QSqlQuery()
 
-        query.exec("creat table student(id int primary key,name varchar,sex vchar,age int department vchar)")
+        query.exec("create table student(id int primary key,name vchar,sex vchar ,age int ,department vchar )")
 
         query.exec("insert into student values(1,'张三1','男',20,'计算机')")
         query.exec("insert into student values(2,'李四1','男',19,'经管')")
@@ -50,6 +50,7 @@ class DateGrid(QWidget):
 
     def __init__(self):
         super(DateGrid, self).__init__()
+        self.setWindowTitle("分页查询例子")
         self.resize(750, 300)
         self.createTableAndInit()
 
@@ -57,9 +58,10 @@ class DateGrid(QWidget):
         self.totalPage = 0
         self.totalRecordCount = 0
         self.PageRecordCount = 6
+        self.initUI()
 
     def initUI(self):
-        self.createWinow()
+        self.createWindow()
         self.setTableView()
 
     def createWindow(self):
@@ -100,7 +102,7 @@ class DateGrid(QWidget):
 
         mainLayout = QVBoxLayout(self)
         mainLayout.addLayout(operatorLayout)
-        mainLayout.addLayout(self.tableView)
+        mainLayout.addWidget(self.tableView)
         mainLayout.addLayout(statusLayout)
         self.setLayout(mainLayout)
 
@@ -110,7 +112,7 @@ class DateGrid(QWidget):
         self.totalRecordCount = self.getTotalRecordCount()
         self.totalPage = self.getPageCount()
         self.updateStatus()
-        self.setTotalpageLabel()
+        self.setTotalPageLabel()
         self.setTotalRecordLabel()
 
         self.recordQuery(0)
@@ -148,7 +150,7 @@ class DateGrid(QWidget):
         self.currentPagelabel.setText(szCurrentText)
 
         if self.currentPage == 1:
-            self.preButton.setEnabled(False)
+            self.prevButton.setEnabled(False)
             self.nextButton.setEnabled(True)
         elif self.currentPage == self.totalPage:
             self.preButton.setEnabled(True)
