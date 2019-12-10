@@ -72,7 +72,7 @@ class DateGrid(QWidget):
 
         switchPage = QLabel("转到第")
         page = QLabel("页")
-        operatorLayout.addWidget(self.preButton)
+        operatorLayout.addWidget(self.prevButton)
         operatorLayout.addWidget(self.nextButton)
         operatorLayout.addWidget(switchPage)
         operatorLayout.addWidget(self.switchPageLineEdit)
@@ -102,7 +102,7 @@ class DateGrid(QWidget):
         mainLayout.addLayout(operatorLayout)
         mainLayout.addLayout(self.tableView)
         mainLayout.addLayout(statusLayout)
-        self.layout(mainLayout)
+        self.setLayout(mainLayout)
 
     def setTableView(self):
         self.queryModel = QSqlQueryModel(self)
@@ -138,19 +138,19 @@ class DateGrid(QWidget):
         else:
             return (self.totalRecordCount / self.PageRecordCount + 1)
 
-    def recordQuery(self,limitIndex):
-        szQuery=("select * from student limit %d,%d " %(limitIndex,self.PageRecordCount))
-        print('query sql='+szQuery)
+    def recordQuery(self, limitIndex):
+        szQuery = ("select * from student limit %d,%d " % (limitIndex, self.PageRecordCount))
+        print('query sql=' + szQuery)
         self.queryModel.setQuery(szQuery)
 
     def updateStatus(self):
-        szCurrentText=("当前第%d页" %self.currentPage)
+        szCurrentText = ("当前第%d页" % self.currentPage)
         self.currentPagelabel.setText(szCurrentText)
 
-        if self.currentPage==1:
+        if self.currentPage == 1:
             self.preButton.setEnabled(False)
             self.nextButton.setEnabled(True)
-        elif self.currentPage==self.totalPage:
+        elif self.currentPage == self.totalPage:
             self.preButton.setEnabled(True)
             self.nextButton.setEnabled(False)
         else:
@@ -158,48 +158,48 @@ class DateGrid(QWidget):
             self.nextButton.setEnabled(True)
 
     def setTotalPageLabel(self):
-        szPageCountText=("总共%d页" %self.totalPage)
+        szPageCountText = ("总共%d页" % self.totalPage)
         self.totalRecordLabel.setText(szPageCountText)
 
     def setTotalRecordLabel(self):
-        szTotalRecordText=("共%d条" %self.totalRecordCount)
-        print('***setTotalRecordLabel szTotalRecordText='+szTotalRecordText)
+        szTotalRecordText = ("共%d条" % self.totalRecordCount)
+        print('***setTotalRecordLabel szTotalRecordText=' + szTotalRecordText)
         self.totalRecordLabel.setText(szTotalRecordText)
 
     def onPrevButtonClick(self):
         print('***onPrevButtonClick')
-        limitIndex=(self.currentPage-2)*self.PageRecordCount
+        limitIndex = (self.currentPage - 2) * self.PageRecordCount
         self.recordQuery(limitIndex)
-        self.currentPage-=1
+        self.currentPage -= 1
         self.updateStatus()
 
     def onNextButtonClick(self):
         print('***onNextButtonClick')
-        limitIndex=self.currentPage*self.PageRecordCount
+        limitIndex = self.currentPage * self.PageRecordCount
         self.recordQuery(limitIndex)
-        self.currentPage+=1
+        self.currentPage += 1
         self.updateStatus()
 
     def onSwitchPageButtonClick(self):
-        szText=self.switchPageLineEdit.text()
+        szText = self.switchPageLineEdit.text()
 
-        pageIndex=int(szText)
+        pageIndex = int(szText)
 
-        if pageIndex>self.totalPage or pageIndex<1:
-            QMessageBox(self,"提示","没有指定的页面，请重新输入")
+        if pageIndex > self.totalPage or pageIndex < 1:
+            QMessageBox(self, "提示", "没有指定的页面，请重新输入")
             return
 
-        limitIndex=(pageIndex-1)*self.PageRecordCount
+        limitIndex = (pageIndex - 1) * self.PageRecordCount
 
         self.recordQuery(limitIndex)
 
-        self.currentPage=pageIndex
+        self.currentPage = pageIndex
 
         self.updateStatus()
 
+
 if __name__ == '__main__':
-    app=QApplication(sys.argv)
-    example=DateGrid()
+    app = QApplication(sys.argv)
+    example = DateGrid()
     example.show()
     sys.exit(app.exec_())
-
