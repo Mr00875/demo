@@ -173,3 +173,33 @@ class DateGrid(QWidget):
         self.currentPage-=1
         self.updateStatus()
 
+    def onNextButtonClick(self):
+        print('***onNextButtonClick')
+        limitIndex=self.currentPage*self.PageRecordCount
+        self.recordQuery(limitIndex)
+        self.currentPage+=1
+        self.updateStatus()
+
+    def onSwitchPageButtonClick(self):
+        szText=self.switchPageLineEdit.text()
+
+        pageIndex=int(szText)
+
+        if pageIndex>self.totalPage or pageIndex<1:
+            QMessageBox(self,"提示","没有指定的页面，请重新输入")
+            return
+
+        limitIndex=(pageIndex-1)*self.PageRecordCount
+
+        self.recordQuery(limitIndex)
+
+        self.currentPage=pageIndex
+
+        self.updateStatus()
+
+if __name__ == '__main__':
+    app=QApplication(sys.argv)
+    example=DateGrid()
+    example.show()
+    sys.exit(app.exec_())
+
