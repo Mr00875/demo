@@ -8,7 +8,7 @@ from PyQt5.QtSql import *
 class DateGrid(QWidget):
     def createTableAndInit(self):
         self.db = QSqlDatabase.addDatabase('QSQLITE')
-        self.db.setDatabaseName('./db/database.db')
+        self.db.setDatabaseName('./database.db')
 
         if not self.db.open():
             return False
@@ -63,6 +63,13 @@ class DateGrid(QWidget):
     def initUI(self):
         self.createWindow()
         self.setTableView()
+
+        self.prevButton.clicked.connect(self.onPrevButtonClick)
+        self.nextButton.clicked.connect(self.onNextButtonClick)
+        self.switchPageButton.clicked.connect(self.onSwitchPageButtonClick)
+
+    def closeEvent(self, event):
+        self.db.close()
 
     def createWindow(self):
         operatorLayout = QHBoxLayout()
@@ -156,7 +163,7 @@ class DateGrid(QWidget):
             self.preButton.setEnabled(True)
             self.nextButton.setEnabled(False)
         else:
-            self.preButton.setEnabled(True)
+            self.prevButton.setEnabled(True)
             self.nextButton.setEnabled(True)
 
     def setTotalPageLabel(self):
