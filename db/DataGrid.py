@@ -159,8 +159,8 @@ class DateGrid(QWidget):
         if self.currentPage == 1:
             self.prevButton.setEnabled(False)
             self.nextButton.setEnabled(True)
-        elif self.currentPage == self.totalPage:
-            self.preButton.setEnabled(True)
+        elif self.currentPage == int(self.totalPage):
+            self.prevButton.setEnabled(True)
             self.nextButton.setEnabled(False)
         else:
             self.prevButton.setEnabled(True)
